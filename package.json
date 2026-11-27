@@ -1,0 +1,69 @@
+{
+  "name": "@slz233/dsh-enhance-mode",
+  "version": "0.9.0",
+  "license": "MIT",
+  "type": "module",
+  "description": "在标准模式基础上追加一段自己的系统提示词；被上游拒答后，点一下输入框上方的「清理失败」就能把失败回合从上下文里摘掉，会话原地复活。",
+  "keywords": [
+    "dsh",
+    "deepseek-harness",
+    "cordis",
+    "plugin",
+    "bundle",
+    "agent-preset",
+    "system-prompt",
+    "prompt"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/slz233/dsh-enhance-mode.git"
+  },
+  "homepage": "https://github.com/slz233/dsh-enhance-mode#readme",
+  "bugs": {
+    "url": "https://github.com/slz233/dsh-enhance-mode/issues"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "inject": [
+        "@deepseek-ai/dsh-client-ui-conversation"
+      ]
+    }
+  },
+  "exports": {
+    ".": "./lib/api.mjs",
+    "./lib/api.mjs": "./lib/api.mjs",
+    "./prompt/index.js": "./prompt/index.js",
+    "./client": "./client/index.js",
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.svg",
+    "./package.json": "./package.json"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "cordis.patch.yml",
+    "prompt",
+    "lib",
+    "client",
+    "scripts",
+    "docs",
+    "locale",
+    "icon.svg",
+    "README.md",
+    "README.en.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "sync": "node scripts/sync-standard.mjs",
+    "sync:presets": "node scripts/sync-presets.mjs",
+    "test": "node scripts/test-presets.mjs && node scripts/test-wiring.mjs && node scripts/test-actions.mjs && node scripts/test-bridges.mjs && node scripts/test-api.mjs && node scripts/test-client.mjs && node scripts/test-heal.mjs && node scripts/test-update.mjs"
+  }
+}

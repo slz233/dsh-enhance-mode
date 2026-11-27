@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Enhance mode",
+    "description": "Adds one paragraph of your own text to the end of the system prompt, on top of the Standard mode. Only sessions that select it are affected."
+  }
+}

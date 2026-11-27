@@ -1,0 +1,12 @@
+node_modules/
+.DS_Store
+Thumbs.db
+*.log
+_scratch/
+_local/
+
+# 本机的 DSH_HOME，仅供「打开提示词.cmd」定位用；不进仓库
+dsh-home.txt
+
+# Obsidian 编辑器配置
+.obsidian/
