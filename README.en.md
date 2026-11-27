@@ -4,7 +4,10 @@
 
 An optional fifth mode for DeepSeek Harness (DSH): **exactly the same as Standard mode, except that one paragraph of your own writing is appended to the end of the system prompt.**
 
-It is deliberately small: exactly one feature — append the text you write to the end of the system prompt. No other switches, no extra tools, no permission changes, no touching official files.
+It has two traits:
+
+- **Lightweight**: a layer that sits outside DSH and only appends one paragraph to the system prompt. It does not modify DSH itself, does not touch official files, and does not take over tools or permissions; installing it only adds a paragraph, uninstalling it puts everything back with nothing left behind.
+- **Preset management**: the text you write is treated as files — write as many presets as you like, each conversation remembers which one it uses, and you can switch, rename, save-as and delete them at any time without editing config files.
 
 And when the upstream rejects a turn or cuts an answer off halfway, the **Clean** button above the input box takes that failed turn out of the context, so the conversation keeps working instead of being thrown away.
 
@@ -21,7 +24,6 @@ And when the upstream rejects a turn or cuts an answer off halfway, the **Clean*
 |---|---|
 | **Clean failures button** | After a rejection, one click pulls the failed turns out of the **model's view**; the session keeps going |
 | **Version notice** | A quiet check ten seconds after start; when something newer exists, one line at the top of "Manage all…" — never a popup |
-| **Plain-language wording** | Every field in the manage dialog now says what it is and where it shows up |
 
 It ships with three ready-made example presets, so you can try it immediately:
 
@@ -66,6 +68,8 @@ It will pull the package from GitHub through the plugin manager and tell you to 
 3. Open the capsule and pick a preset;
 4. To write your own: edit `%DSH_HOME%\enhance\mode-prompt.md` — it applies **from the next turn**, no restart;
 5. To add / edit / delete presets: open "Manage all…" in the capsule, or edit the `.md` files in `%DSH_HOME%\enhance\presets\` directly.
+
+> Both `%DSH_HOME%` paths above point at DSH's own data directory; the plugin keeps everything in the `enhance\` folder under it and writes nowhere else on the system.
 
 The first time you start an Enhance Mode conversation, if `presets\` has no `.md` at all, the plugin drops the three examples in for you.
 If you already have files there, nothing is touched. Deleted examples do not come back — create your own.
@@ -156,6 +160,11 @@ Every paragraph of every answer must end with the character 喵.
 
 Renaming inside the app **really renames the file on disk**. Renaming in Explorer is also recognized by content, and both the ordering and the conversations using it follow along.
 
+> **Deleting is a soft delete, and uninstalling won't clean up after you.**
+> Presets live in DSH's data directory under `enhance\presets\`, i.e. `%DSH_HOME%\enhance\presets\`.
+> Deleting one inside the app only moves the file into the `_trash\` subfolder next to it — full path `%DSH_HOME%\enhance\presets\_trash\` — so it never leaves your disk. To get it back, move it from `_trash\` up into `presets\`; to really get rid of it, delete it yourself in Explorer.
+> Uninstalling the plugin leaves `%DSH_HOME%\enhance\` (presets and `sessions.json`) exactly where it is; the plugin never deletes your files.
+
 ## Scope: one conversation only
 
 Which preset a conversation uses is recorded **per conversation** (in `%DSH_HOME%\enhance\sessions.json`):
@@ -201,9 +210,9 @@ Other commands:
 - It adds nothing to other modes, changes no permissions, takes over no approvals;
 - Apart from the single "check latest version" request, it makes no external calls and reports nothing.
 
-## Updating to a newer version
+## How to update (three manual steps)
 
-DSH's plugin page does **not** auto-update third-party plugins (the Update button only appears for official on-demand plugins), so updating means uninstall + reinstall:
+DSH's plugin page does **not** auto-update third-party plugins, and the plugin will not install anything for you either — it only tells you that a newer version exists; getting it is still these three steps:
 
 1. **Plugins** page → find `@slz233/dsh-enhance-mode` → **Uninstall**;
 2. Top right **Add plugin** → **Install third-party plugin** → paste the same package name;
@@ -211,11 +220,11 @@ DSH's plugin page does **not** auto-update third-party plugins (the Update butto
 
 **Uninstalling loses nothing**: presets, order, and each conversation's choice all live in `%DSH_HOME%\enhance\`.
 
-### It tells you when a newer version exists
+### Bonus: it tells you when there is a newer version
 
 Since this version, the plugin quietly checks the latest published version ten seconds after start
-(cached for 24 hours, mirror first then npmjs). When there is something newer, the
-"Manage all…" dialog gets a line at the top:
+(cached for 24 hours, mirror first then npmjs), and adds one line at the top of the
+"Manage all…" dialog. **It is only a notice — it does not touch your installation**:
 
 ```
 New version v0.10.0 available (you have v0.9.0)             How to update
@@ -224,7 +233,7 @@ New version v0.10.0 available (you have v0.9.0)             How to update
 Expanding it shows the three steps above. **No popups, no interruptions, nothing reported anywhere**;
 offline or both registries unreachable means it simply shows nothing.
 
-> 0.9.0 is the first release that contains this check, so older versions will never be told — update them manually once.
+> 0.9.0 is the first release that carries this notice, so older versions will never see it — update them manually once.
 
 ## Uninstall
 
